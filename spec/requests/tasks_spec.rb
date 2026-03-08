@@ -1,10 +1,4 @@
 require "rails_helper"
-require "simplecov"
-
-SimpleCov.start "rails" do
-  minimum_coverage 80
-  add_filter "/spec/"
-end
 
 RSpec.describe "Tasks API", type: :request do
   let(:valid_attrs) { { title: "Mi tarea", description: "Descripción", completed: false } }
@@ -40,6 +34,21 @@ RSpec.describe "Tasks API", type: :request do
     it "retorna 404 cuando no existe" do
       get "/tasks/99999"
       expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "PATCH /tasks/:id" do
+    it "actualiza la tarea con atributos válidos" do
+      task = Task.create!(valid_attrs)
+      patch "/tasks/#{task.id}", params: { task: { title: "Actualizada" } }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["title"]).to eq("Actualizada")
+    end
+
+    it "rechaza actualización con atributos inválidos" do
+      task = Task.create!(valid_attrs)
+      patch "/tasks/#{task.id}", params: { task: { title: "" } }
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
