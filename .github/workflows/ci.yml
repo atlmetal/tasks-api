@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.3"
           bundler-cache: true
       - name: Preparar base de datos
         run: |
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.3"
           bundler-cache: true
       - run: gem install brakeman
       - run: brakeman -q --no-pager
